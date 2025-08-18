@@ -5,6 +5,8 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
+import { connectDB } from "./config/db.config.js";
+
 const app = express();
 
 // Middleware to handle CORS
@@ -16,11 +18,14 @@ app.use(
   })
 );
 
+// Connect Database
+connectDB();
+
 // Middleware
 app.use(express.json());
 
 // Serve uploads folder
-app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
+// app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
 
 // Start Server
 const PORT = process.env.PORT || 8000;
