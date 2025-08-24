@@ -7,6 +7,8 @@ import path from "path";
 
 import { connectDB } from "./config/db.config.js";
 
+import authRoutes from "./routes/authRoutes.route.js";
+
 const app = express();
 
 // Middleware to handle CORS
@@ -24,6 +26,8 @@ connectDB();
 // Middleware
 app.use(express.json());
 
+// Routes
+app.use("/api/auth", authRoutes);
 // Serve uploads folder
 // app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
 
