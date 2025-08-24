@@ -4,12 +4,16 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 
 import { connectDB } from "./config/db.config.js";
-
 import authRoutes from "./routes/authRoutes.route.js";
 
 const app = express();
+
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Middleware to handle CORS
 app.use(
@@ -28,8 +32,9 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+
 // Serve uploads folder
-// app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Start Server
 const PORT = process.env.PORT || 8000;
