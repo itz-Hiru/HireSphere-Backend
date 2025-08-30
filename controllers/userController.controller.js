@@ -10,6 +10,15 @@ export const updateProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(400).json({ message: "User not found" });
 
+    const {
+      name,
+      avatar,
+      resume,
+      companyName,
+      companyDescription,
+      companyLogo,
+    } = req.body;
+
     user.name = name || user.name;
     user.avatar = avatar || user.avatar;
     user.resume = resume || user.resume;
