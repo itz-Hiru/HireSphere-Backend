@@ -8,7 +8,8 @@ import { fileURLToPath } from "url";
 
 import { connectDB } from "./config/db.config.js";
 import authRoutes from "./routes/authRoutes.route.js";
-
+import userRoutes from "./routes/userRoutes.route.js";
+ 
 const app = express();
 
 // Fix __dirname for ES modules
@@ -32,6 +33,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 // Serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
