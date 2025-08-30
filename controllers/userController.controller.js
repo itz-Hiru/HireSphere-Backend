@@ -68,3 +68,18 @@ export const deleteResume = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @description Get public profile
+// @route api/user/:id
+// access public
+export const getPublicProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
