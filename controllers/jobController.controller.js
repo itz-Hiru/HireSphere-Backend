@@ -185,3 +185,24 @@ export const updateJob = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @description Delete a job
+// @route /api/jobs/delete/:id
+// @access private - employer
+export const deleteJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    if (!job) return res.status(403).json({ message: "Job not found" });
+
+    if (job.company.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "No permission to update this job" });
+    }
+
+    await job.deleteOne();
+    res.status(201).json({ message: "Job deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
