@@ -9,7 +9,7 @@ import { protect } from "../middlewares/authMiddleware.middleware.js";
 const router = express.Router();
 
 router.put("/update/profile", protect, updateProfile);
-router.post("/delete/resume", protect, deleteResume);
+router.delete("/delete/resume", protect, deleteResume);
 router.get("/:id", getPublicProfile);
 
 export default router;
