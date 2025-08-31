@@ -16,7 +16,7 @@ router.post("/create", protect, createJob);
 router.get("/", getJobs);
 router.get("/get-jobs-employer", protect, getJobsEmployer);
 router.get("/:id", protect, getJobById);
-router.put("/toggle/:id", toggleCloseJob);
+router.put("/toggle/:id", protect, toggleCloseJob);
 router.put("/update/:id", protect, updateJob);
 router.delete("/delete/:id", protect, deleteJob);
 
