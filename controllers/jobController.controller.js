@@ -162,3 +162,26 @@ export const getJobById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @description Update a job
+// @route /api/jobs/update/:id
+// @access private - employer
+export const updateJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    if (!job) return res.status(403).json({ message: "Job not found" });
+
+    if (job.company.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "No permission to update this job" });
+    }
+
+    Object.assign(job, req.body);
+
+    const updatedJob = await Job.save();
+    res.status(201).json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
