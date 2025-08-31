@@ -179,7 +179,7 @@ export const updateJob = async (req, res) => {
 
     Object.assign(job, req.body);
 
-    const updatedJob = await Job.save();
+    const updatedJob = await job.save();
     res.status(201).json(updatedJob);
   } catch (error) {
     res.status(500).json({ message: error.message });
