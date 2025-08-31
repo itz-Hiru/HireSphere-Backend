@@ -213,7 +213,9 @@ export const deleteJob = async (req, res) => {
 export const toggleCloseJob = async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
-    if (!job) return res.status(403).json({ message: "Job not found" });
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
 
     if (job.company.toString() !== req.user._id.toString()) {
       return res
@@ -224,7 +226,11 @@ export const toggleCloseJob = async (req, res) => {
     job.isClosed = !job.isClosed;
     await job.save();
 
-    res.status(201).json({ message: "Job closed successfully" });
+    res.status(200).json({
+      message: job.isClosed
+        ? "Job closed successfully"
+        : "Job reopened successfully"
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
