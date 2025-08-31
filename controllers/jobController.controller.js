@@ -125,3 +125,40 @@ export const getJobsEmployer = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @description Get a job by Id
+// @route /api/jobs/:id
+// @access private
+export const getJobById = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const job = await Job.findById(req.params.id).populate(
+      "company",
+      "name companyName companyLogo"
+    );
+
+    if (!job) {
+      return res.status(403).json({ message: "Job not found" });
+    }
+
+    let applicationStatus = null;
+
+    if (userId) {
+      const application = await Application.findOne({
+        job: job._id,
+        applicant: userId,
+      }).select("status");
+
+      if (application) {
+        applicationStatus = application.status;
+      }
+    }
+
+    res.status(201).json({
+      ...job.toObject(),
+      applicationStatus,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
