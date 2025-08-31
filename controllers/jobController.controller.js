@@ -91,3 +91,37 @@ export const getJobs = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @description Get posted jobs by employer
+// @route /api/jobs/get-jobs-employer
+// @access private
+export const getJobsEmployer = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { role } = req.user;
+
+    if (role !== "employer") {
+      return res.status(401).json({ message: "Access denied" });
+    }
+
+    const jobs = await Job.find({ company: userId })
+      .populate("company", "name companyName companyLogo")
+      .lean();
+
+    const jobsWithApplicationCounts = await Promise.all(
+      jobs.map(async (job) => {
+        const applicationCount = await Application.countDocuments({
+          job: job._id,
+        });
+        return {
+          ...job,
+          applicationCount,
+        };
+      })
+    );
+
+    res.status(201).json(jobsWithApplicationCounts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
